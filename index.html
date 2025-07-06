@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EnglishLearner - Học Tiếng Anh Online</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <div class="logo">
+        <i class="fas fa-graduation-cap"></i>
+        <span>EnglishLearner</span>
+      </div>
+      <nav class="nav">
+        <a href="#home" class="nav-link active">Trang chủ</a>
+        <a href="#skills" class="nav-link">Kỹ năng</a>
+        <a href="#test" class="nav-link">Kiểm tra</a>
+        <a href="#progress" class="nav-link">Tiến độ</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="home" class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <h1>Học Tiếng Anh Hiệu Quả</h1>
+        <p>Phát triển toàn diện 4 kỹ năng Nghe - Nói - Đọc - Viết với phương pháp học tập hiện đại</p>
+        <div class="hero-buttons">
+          <button class="btn btn-primary" id="start-learning-btn">
+            <i class="fas fa-play"></i>
+            Bắt đầu học
+          </button>
+          <button class="btn btn-secondary" id="take-test-btn">
+            <i class="fas fa-clipboard-check"></i>
+            Kiểm tra trình độ
+          </button>
+        </div>
+      </div>
+      <div class="hero-image">
+        <div class="floating-card">
+          <i class="fas fa-headphones"></i>
+          <span>Listening</span>
+        </div>
+        <div class="floating-card">
+          <i class="fas fa-microphone"></i>
+          <span>Speaking</span>
+        </div>
+        <div class="floating-card">
+          <i class="fas fa-book-open"></i>
+          <span>Reading</span>
+        </div>
+        <div class="floating-card">
+          <i class="fas fa-pen"></i>
+          <span>Writing</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills Section -->
+  <section id="skills" class="skills-section">
+    <div class="container">
+      <h2 class="section-title">4 Kỹ Năng Tiếng Anh</h2>
+      <div class="skills-grid">
+        <!-- Listening -->
+        <div class="skill-card" data-skill="listening">
+          <div class="skill-icon">
+            <i class="fas fa-headphones"></i>
+          </div>
+          <h3>Listening (Nghe)</h3>
+          <p>Rèn luyện khả năng nghe hiểu qua các bài tập đa dạng</p>
+          <div class="skill-levels">
+            <button class="level-btn" data-level="beginner">Cơ bản</button>
+            <button class="level-btn" data-level="intermediate">Trung cấp</button>
+            <button class="level-btn" data-level="advanced">Nâng cao</button>
+          </div>
+        </div>
+
+        <!-- Speaking -->
+        <div class="skill-card" data-skill="speaking">
+          <div class="skill-icon">
+            <i class="fas fa-microphone"></i>
+          </div>
+          <h3>Speaking (Nói)</h3>
+          <p>Phát triển kỹ năng giao tiếp và phát âm chuẩn</p>
+          <div class="skill-levels">
+            <button class="level-btn" data-level="beginner">Cơ bản</button>
+            <button class="level-btn" data-level="intermediate">Trung cấp</button>
+            <button class="level-btn" data-level="advanced">Nâng cao</button>
+          </div>
+        </div>
+
+        <!-- Reading -->
+        <div class="skill-card" data-skill="reading">
+          <div class="skill-icon">
+            <i class="fas fa-book-open"></i>
+          </div>
+          <h3>Reading (Đọc)</h3>
+          <p>Nâng cao khả năng đọc hiểu và từ vựng</p>
+          <div class="skill-levels">
+            <button class="level-btn" data-level="beginner">Cơ bản</button>
+            <button class="level-btn" data-level="intermediate">Trung cấp</button>
+            <button class="level-btn" data-level="advanced">Nâng cao</button>
+          </div>
+        </div>
+
+        <!-- Writing -->
+        <div class="skill-card" data-skill="writing">
+          <div class="skill-icon">
+            <i class="fas fa-pen"></i>
+          </div>
+          <h3>Writing (Viết)</h3>
+          <p>Hoàn thiện kỹ năng viết từ cơ bản đến nâng cao</p>
+          <div class="skill-levels">
+            <button class="level-btn" data-level="beginner">Cơ bản</button>
+            <button class="level-btn" data-level="intermediate">Trung cấp</button>
+            <button class="level-btn" data-level="advanced">Nâng cao</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Progress Section -->
+  <section id="progress" class="progress-section">
+    <div class="container">
+      <h2 class="section-title">Tiến Độ Học Tập</h2>
+      <div class="progress-grid">
+        <div class="progress-card">
+          <h4>Listening</h4>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: 65%"></div>
+          </div>
+          <span>65% hoàn thành</span>
+        </div>
+        <div class="progress-card">
+          <h4>Speaking</h4>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: 45%"></div>
+          </div>
+          <span>45% hoàn thành</span>
+        </div>
+        <div class="progress-card">
+          <h4>Reading</h4>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: 80%"></div>
+          </div>
+          <span>80% hoàn thành</span>
+        </div>
+        <div class="progress-card">
+          <h4>Writing</h4>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: 30%"></div>
+          </div>
+          <span>30% hoàn thành</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2025 EnglishLearner. Tất cả quyền được bảo lưu.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
