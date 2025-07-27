@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Grammar Questions Collection</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .btn {
+            background: #4285f4;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+        }
+
+        .btn:hover {
+            background: #3367d6;
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .status {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .log {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+            text-align: left;
+            font-family: monospace;
+            font-size: 14px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🔥 Create Firebase Grammar Questions Collection</h1>
+        <p>This will create the <strong>english-grammar-questions</strong> collection in your Firestore database with
+            <strong>40 carefully crafted English grammar Q&A</strong>.</p>
+
+        <div id="status" class="status info">
+            Ready to create collection. Click the button below to start.
+        </div>
+
+        <button id="createBtn" class="btn" onclick="createCollection()">
+            📚 Create Grammar Questions Collection (40 Questions)
+        </button>
+
+        <button id="checkBtn" class="btn" onclick="checkCollection()" style="background: #28a745;">
+            🔍 Check Existing Questions
+        </button>
+
+        <div id="log" class="log" style="display: none;">
+            <h4>📋 Console Output:</h4>
+            <div id="logContent"></div>
+        </div>
+
+        <div style="margin-top: 30px; font-size: 14px; color: #666;">
+            <p><strong>Project:</strong> cuoikhoa-8bef5</p>
+            <p><strong>Collection:</strong> english-grammar-questions</p>
+            <p><strong>Questions:</strong> 40 grammar Q&A with explanations</p>
+            <p><strong>Levels:</strong> Beginner (12) | Intermediate (16) | Advanced (12)</p>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+        import { getFirestore, collection, setDoc, doc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAPUBwXQhhd_CfiwsAtJgc_GF2IVBk01qs",
+            authDomain: "cuoikhoa-8bef5.firebaseapp.com",
+            projectId: "cuoikhoa-8bef5",
+            storageBucket: "cuoikhoa-8bef5.firebasestorage.app",
+            messagingSenderId: "658549382274",
+            appId: "1:658549382274:web:edf0f890a77c704cb5289b",
+            measurementId: "G-FQHWY59NP7"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Grammar questions data (40 total questions)
+        // Helper functions
+        function updateStatus(message, type = 'info') {
+            const statusEl = document.getElementById('status');
+            statusEl.textContent = message;
+            statusEl.className = `status ${type}`;
+        }
+
+        function logMessage(message) {
+            const logEl = document.getElementById('log');
+            const logContent = document.getElementById('logContent');
+            logEl.style.display = 'block';
+            logContent.innerHTML += `<div>${new Date().toLocaleTimeString()}: ${message}</div>`;
+            logContent.scrollTop = logContent.scrollHeight;
+        }
+
+        // Function to create collection and add questions
+        window.createCollection = async function () {
+            const createBtn = document.getElementById('createBtn');
+            createBtn.disabled = true;
+            createBtn.textContent = '⏳ Creating Collection...';
+
+            updateStatus('Creating grammar questions collection...', 'info');
+            logMessage('Starting to create grammar questions collection...');
+
+            try {
+                let successCount = 0;
+
+                for (const question of grammarQuestions) {
+                    const { id, ...questionData } = question;
+
+                    // Add timestamps
+                    questionData.createdAt = new Date();
+                    questionData.updatedAt = new Date();
+
+                    // Create document with specific ID
+                    await setDoc(doc(db, "english-grammar-questions", id), questionData);
+                    successCount++;
+                    logMessage(`✅ Added ${id}: "${questionData.question.substring(0, 50)}..."`);
+                }
+
+                updateStatus(`🎉 Successfully created collection with ${successCount} questions!`, 'success');
+                logMessage(`🎉 Collection created successfully! Added ${successCount} questions.`);
+
+            } catch (error) {
+                updateStatus(`❌ Error creating collection: ${error.message}`, 'error');
+                logMessage(`❌ Error: ${error.message}`);
+                console.error('Error:', error);
+            } finally {
+                createBtn.disabled = false;
+                createBtn.textContent = '📚 Create Grammar Questions Collection';
+            }
+        };
+
+        // Function to check existing questions
+        window.checkCollection = async function () {
+            const checkBtn = document.getElementById('checkBtn');
+            checkBtn.disabled = true;
+            checkBtn.textContent = '⏳ Checking...';
+
+            updateStatus('Checking existing questions...', 'info');
+            logMessage('Checking existing questions in collection...');
+
+            try {
+                const querySnapshot = await getDocs(collection(db, "english-grammar-questions"));
+
+                if (querySnapshot.empty) {
+                    updateStatus('📭 No questions found in collection', 'info');
+                    logMessage('📭 Collection is empty or does not exist');
+                } else {
+                    const questions = [];
+                    querySnapshot.forEach((doc) => {
+                        questions.push({ id: doc.id, ...doc.data() });
+                    });
+
+                    updateStatus(`📚 Found ${questions.length} questions in collection`, 'success');
+                    logMessage(`📚 Found ${questions.length} questions:`);
+
+                    questions.forEach((q, index) => {
+                        logMessage(`${index + 1}. ${q.id}: "${q.question.substring(0, 50)}..." (${q.level} - ${q.topic})`);
+                    });
+                }
+
+            } catch (error) {
+                updateStatus(`❌ Error checking collection: ${error.message}`, 'error');
+                logMessage(`❌ Error: ${error.message}`);
+                console.error('Error:', error);
+            } finally {
+                checkBtn.disabled = false;
+                checkBtn.textContent = '🔍 Check Existing Questions';
+            }
+        };
+
+        // Initialize
+        logMessage('🚀 Firebase initialized successfully');
+        logMessage('📦 Ready to create grammar questions collection');
+    </script>
+</body>
+
+</html>
