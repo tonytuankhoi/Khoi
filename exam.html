@@ -55,7 +55,7 @@
     }
 
     .setup-form {
-      max-width: 500px;
+      max-width: 525px;
       margin: 0 auto;
     }
 
@@ -868,6 +868,22 @@
     };
 
     window.submitExam = function () {
+      // Kiểm tra đã trả lời hết chưa
+      const totalQuestions = examState.questions.length;
+      let unanswered = [];
+      for (let i = 0; i < totalQuestions; i++) {
+        if (examState.answers[i] === undefined) {
+          unanswered.push(i + 1);
+        }
+      }
+      if (unanswered.length > 0) {
+        alert('Bạn chưa trả lời hết các câu hỏi! Vui lòng hoàn thành tất cả trước khi nộp bài.\nCâu chưa làm: ' + unanswered.join(', '));
+        // Chuyển đến câu hỏi đầu tiên chưa làm
+        examState.currentQuestion = unanswered[0] - 1;
+        displayCurrentQuestion();
+        return;
+      }
+
       if (confirm('Are you sure you want to submit your exam?')) {
         clearInterval(examState.timer);
         calculateResults();
