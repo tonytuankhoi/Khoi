@@ -718,7 +718,7 @@
     async function loadQuestions(levels, count) {
       try {
         // Get all questions from selected levels
-        const questionsRef = collection(db, "english-grammar-questions");
+        const questionsRef = collection(db, "questions");
         const querySnapshot = await getDocs(questionsRef);
 
         let allQuestions = [];
@@ -736,6 +736,7 @@
         // Shuffle and select questions
         allQuestions = shuffleArray(allQuestions);
         examState.questions = allQuestions.slice(0, Math.min(count, allQuestions.length));
+        console.log("🚀 ~ loadQuestions ~ examState.questions:", examState.questions)
 
         console.log(`Loaded ${examState.questions.length} questions`);
 
@@ -812,11 +813,26 @@
 
       // Update question meta
       document.getElementById('questionLevel').textContent = question.level.charAt(0).toUpperCase() + question.level.slice(1);
-      document.getElementById('questionTopic').textContent = question.topic;
-      document.getElementById('questionDifficulty').textContent = question.difficulty.charAt(0).toUpperCase() + question.difficulty.slice(1);
+      document.getElementById('questionTopic').textContent = question.skill ? question.skill.charAt(0).toUpperCase() + question.skill.slice(1) : 'General';
+      document.getElementById('questionDifficulty').textContent = question.level.charAt(0).toUpperCase() + question.level.slice(1);
 
-      // Update question text
-      document.getElementById('questionText').textContent = question.question;
+      // Update question text with audio support
+      const questionTextElement = document.getElementById('questionText');
+      let questionHTML = question.question;
+      
+      // Add audio player if question has audio
+      if (question.audioUrl) {
+        questionHTML += `
+          <div style="margin-top: 15px;">
+            <audio controls style="width: 100%; max-width: 400px;">
+              <source src="${question.audioUrl}" type="audio/mpeg">
+              Your browser does not support the audio element.
+            </audio>
+          </div>
+        `;
+      }
+      
+      questionTextElement.innerHTML = questionHTML;
 
       // Update options
       const optionsContainer = document.getElementById('questionOptions');
@@ -897,7 +913,12 @@
 
       examState.questions.forEach((question, index) => {
         const userAnswer = examState.answers[index];
-        if (userAnswer === question.correctAnswer) {
+        const correctAnswerText = question.answer;
+        
+        // Find the correct answer index by matching the answer text with options
+        const correctAnswerIndex = question.options.findIndex(option => option === correctAnswerText);
+        
+        if (userAnswer === correctAnswerIndex) {
           correctAnswers++;
         }
       });
@@ -1007,9 +1028,10 @@
 
       examState.questions.forEach((question, index) => {
         const userAnswer = examState.answers[index];
-        const isCorrect = userAnswer === question.correctAnswer;
+        const correctAnswerText = question.answer;
+        const correctAnswerIndex = question.options.findIndex(option => option === correctAnswerText);
+        const isCorrect = userAnswer === correctAnswerIndex;
         const userAnswerText = userAnswer !== undefined ? question.options[userAnswer] : 'Not answered';
-        const correctAnswerText = question.options[question.correctAnswer];
 
         html += '<div style="margin-bottom: 20px; padding: 15px; border: 1px solid #e0e0e0; border-radius: 8px; background: ' + (isCorrect ? '#d4edda' : '#f8d7da') + ';">';
         html += `<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">`;
@@ -1020,6 +1042,12 @@
         html += '</div>';
 
         html += `<p style="margin-bottom: 10px;"><strong>Question:</strong> ${question.question}</p>`;
+        
+        // Add audio info if present
+        if (question.audioUrl) {
+          html += `<p style="margin-bottom: 10px; font-style: italic;"><strong>Audio:</strong> <a href="${question.audioUrl}" target="_blank">🔊 Listen to audio</a></p>`;
+        }
+        
         html += `<p style="margin-bottom: 5px;"><strong>Your Answer:</strong> ${userAnswerText}</p>`;
         html += `<p style="margin-bottom: 5px;"><strong>Correct Answer:</strong> ${correctAnswerText}</p>`;
 
@@ -1029,8 +1057,8 @@
 
         html += `<div style="margin-top: 10px;">`;
         html += `<span style="background: #e3f2fd; color: #1976d2; padding: 3px 8px; border-radius: 10px; font-size: 0.8em; margin-right: 5px;">${question.level}</span>`;
-        html += `<span style="background: #f3e5f5; color: #7b1fa2; padding: 3px 8px; border-radius: 10px; font-size: 0.8em; margin-right: 5px;">${question.topic}</span>`;
-        html += `<span style="background: #e8f5e8; color: #2e7d32; padding: 3px 8px; border-radius: 10px; font-size: 0.8em;">${question.difficulty}</span>`;
+        html += `<span style="background: #f3e5f5; color: #7b1fa2; padding: 3px 8px; border-radius: 10px; font-size: 0.8em; margin-right: 5px;">${question.skill || 'General'}</span>`;
+        html += `<span style="background: #e8f5e8; color: #2e7d32; padding: 3px 8px; border-radius: 10px; font-size: 0.8em;">${question.level}</span>`;
         html += '</div>';
         html += '</div>';
       });
